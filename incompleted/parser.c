@@ -197,16 +197,25 @@ void compileProcDecl(void) {
 ConstantValue* compileUnsignedConstant(void) {
   // TODO: create and return an unsigned constant value
   ConstantValue* constValue;
+  Object* obj;
 
   switch (lookAhead->tokenType) {
   case TK_NUMBER:
     eat(TK_NUMBER);
+    constValue = makeIntConstant(currentToken->value);
     break;
   case TK_IDENT:
     eat(TK_IDENT);
+
+    obj = lookupObject(currentToken->string);
+    if ((obj != NULL) && (obj->kind == OBJ_CONSTANT))
+      constValue = duplicateConstantValue(obj->constAttrs->value);
+    else
+      error(ERR_UNDECLARED_CONSTANT, lookAhead->lineNo, lookAhead->colNo);
     break;
   case TK_CHAR:
     eat(TK_CHAR);
+    constValue = makeCharConstant(currentToken->string[0]);
     break;
   default:
     error(ERR_INVALID_CONSTANT, lookAhead->lineNo, lookAhead->colNo);
