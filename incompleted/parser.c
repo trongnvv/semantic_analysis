@@ -254,7 +254,7 @@ ConstantValue* compileConstant2(void) {
     eat(TK_IDENT);
 
     obj = lookupObject(currentToken->string);
-    if ((obj != NULL) && (obj->kind == OBJ_CONSTANT) && (obj->constAttrs->value->type == TP_INT))
+    if ((obj != NULL) && (obj->kind == OBJ_CONSTANT))
       constValue = duplicateConstantValue(obj->constAttrs->value);
     else
       error(ERR_UNDECLARED_INT_CONSTANT,currentToken->lineNo, currentToken->colNo);
